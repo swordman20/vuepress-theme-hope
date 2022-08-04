@@ -11,6 +11,7 @@ export * from "./footnote";
 export * from "./imageMark";
 export * from "./imageSize";
 export * from "./katex";
+export * from "./mathJax";
 export * from "./lazyLoad";
 export * from "./mark";
 export * from "./include";

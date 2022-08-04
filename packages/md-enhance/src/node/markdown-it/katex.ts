@@ -32,6 +32,7 @@ import type { PluginWithOptions } from "markdown-it";
 import type { RuleInline } from "markdown-it/lib/parser_inline";
 import type { RuleBlock } from "markdown-it/lib/parser_block";
 import type { KatexOptions } from "katex";
+import type { TexOptions } from "../../shared/tex";
 
 /*
  * Test if potential opening or closing delimieter
@@ -227,17 +228,22 @@ const katexBlock = (tex: string, options: KatexOptions): string => {
   }
 };
 
-export const katex: PluginWithOptions<KatexOptions> = (
-  md,
-  options = { throwOnError: false }
-) => {
+export const katex: PluginWithOptions<TexOptions> = (md, options) => {
+  const katexOptions = {
+    throwOnError: false,
+    ...(options?.options as KatexOptions),
+  };
+
+  if (options?.plugins?.includes("mhchem")) {
+    require("katex/contrib/mhchem");
+  }
   md.inline.ruler.after("escape", "math_inline", inlineTex);
   md.block.ruler.after("blockquote", "math_block", blockTex, {
     alt: ["paragraph", "reference", "blockquote", "list"],
   });
 
   md.renderer.rules["math_inline"] = (tokens, index): string =>
-    katexInline(tokens[index].content, options);
+    katexInline(tokens[index].content, katexOptions);
   md.renderer.rules["math_block"] = (tokens, index): string =>
-    `${katexBlock(tokens[index].content, options)}\n`;
+    `${katexBlock(tokens[index].content, katexOptions)}\n`;
 };

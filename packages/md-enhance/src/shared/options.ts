@@ -1,5 +1,6 @@
 import type { LocaleConfig } from "@vuepress/core";
 import type { KatexOptions } from "katex";
+import type { TexOptions } from "./tex";
 import type { AttrsOptions } from "./attrs";
 import type { CodeDemoOptions } from "./codeDemo";
 import type { ImageMarkOptions } from "./imageMark";
@@ -195,7 +196,7 @@ export interface MarkdownEnhanceOptions {
    *
    * @default false
    */
-  tex?: KatexOptions | boolean;
+  tex?: TexOptions | KatexOptions | boolean;
 
   /**
    * Whether to enable chart support
