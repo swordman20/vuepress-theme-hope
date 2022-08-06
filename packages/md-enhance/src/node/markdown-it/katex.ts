@@ -29,11 +29,11 @@ import { tex } from "./tex";
 import { escapeHtml } from "./utils";
 
 import type { PluginWithOptions } from "markdown-it";
-import type { KatexOptions } from "katex";
-import type { TexOptions } from "../../shared/tex";
+import type { KatexOptions as OriginalKatexOptions } from "katex";
+import type { KatexOptions } from "../../shared/katex";
 
 // set KaTeX as the renderer for markdown-it-simplemath
-const katexInline = (tex: string, options: KatexOptions): string => {
+const katexInline = (tex: string, options: OriginalKatexOptions): string => {
   try {
     return Katex.renderToString(tex, { ...options, displayMode: false });
   } catch (error) {
@@ -45,7 +45,7 @@ const katexInline = (tex: string, options: KatexOptions): string => {
   }
 };
 
-const katexBlock = (tex: string, options: KatexOptions): string => {
+const katexBlock = (tex: string, options: OriginalKatexOptions): string => {
   try {
     return `<p class='katex-block'>${Katex.renderToString(tex, {
       ...options,
@@ -62,15 +62,15 @@ const katexBlock = (tex: string, options: KatexOptions): string => {
   }
 };
 
-export const katex: PluginWithOptions<TexOptions> = (md, options) => {
+export const katex: PluginWithOptions<KatexOptions> = (md, options = {}) => {
+  const { mhchem = false, ...userOptions } = options;
+
+  if (mhchem) require("katex/contrib/mhchem");
+
   const katexOptions = {
     throwOnError: false,
-    ...(options?.options as KatexOptions),
+    ...userOptions,
   };
-
-  if (options?.plugins?.includes("mhchem")) {
-    require("katex/contrib/mhchem");
-  }
 
   md.use(tex, {
     render: (content, displayMode) =>

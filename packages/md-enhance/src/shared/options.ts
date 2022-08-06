@@ -1,6 +1,6 @@
 import type { LocaleConfig } from "@vuepress/core";
-import type { KatexOptions } from "katex";
-import type { TexOptions } from "./tex";
+import type { MathJaxOptions } from "./mathjax";
+import type { KatexOptions } from "./katex";
 import type { AttrsOptions } from "./attrs";
 import type { CodeDemoOptions } from "./codeDemo";
 import type { ImageMarkOptions } from "./imageMark";
@@ -186,17 +186,30 @@ export interface MarkdownEnhanceOptions {
   include?: IncludeOptions | boolean;
 
   /**
-   * Whether to enable TeX syntax support
+   * Whether to enable katex support
    *
    * @see https://katex.org/docs/options.html
    *
-   * 是否启用 TeX 语法支持
+   * 是否启用 katex 语法支持
    *
    * @see https://katex.org/docs/options.html
    *
    * @default false
    */
-  tex?: TexOptions | KatexOptions | boolean;
+  katex?: KatexOptions | boolean;
+
+  /**
+   * Whether to enable mathjax support
+   *
+   * @see http://docs.mathjax.org/en/latest/options/index.html
+   *
+   * 是否启用 mathjax 语法支持
+   *
+   * @see http://docs.mathjax.org/en/latest/options/index.html
+   *
+   * @default false
+   */
+  mathjax?: MathJaxOptions | boolean;
 
   /**
    * Whether to enable chart support

@@ -25,16 +25,16 @@
  */
 
 import juice from "juice";
-import { mathjax } from "mathjax-full/js/mathjax.js";
-import { TeX } from "mathjax-full/js/input/tex.js";
-import { SVG } from "mathjax-full/js/output/svg.js";
-import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor.js";
-import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html.js";
-import { AllPackages } from "mathjax-full/js/input/tex/AllPackages.js";
+import { mathjax as MathJax } from "mathjax-full/js/mathjax";
+import { TeX } from "mathjax-full/js/input/tex";
+import { SVG } from "mathjax-full/js/output/svg";
+import { liteAdaptor } from "mathjax-full/js/adaptors/liteAdaptor";
+import { RegisterHTMLHandler } from "mathjax-full/js/handlers/html";
+import { AllPackages } from "mathjax-full/js/input/tex/AllPackages";
 import { tex } from "./tex";
 
 import type { PluginWithOptions } from "markdown-it";
-import type { TexOptions } from "../../shared/tex";
+import type { MathJaxOptions } from "../../shared/mathjax";
 
 interface DocumentOptions {
   InputJax: TeX<unknown, unknown, unknown>;
@@ -49,7 +49,7 @@ const renderMath = (
   const adaptor = liteAdaptor();
 
   RegisterHTMLHandler(adaptor);
-  const mathDocument = mathjax.document(content, documentOptions);
+  const mathDocument = MathJax.document(content, documentOptions);
   /* eslint-disable */
   const html = adaptor.outerHTML(
     mathDocument.convert(content, { display: displayMode })
@@ -62,18 +62,15 @@ const renderMath = (
   return juice(html + stylesheet);
 };
 
-export const mathJaxPlugin: PluginWithOptions<TexOptions> = (md, options) => {
-  // TODO: fix eslint
-  /* eslint-disable */
-  const mathjaxOptions = options?.options;
+export const mathjax: PluginWithOptions<MathJaxOptions> = (md, options) => {
   const documentOptions = {
     InputJax: new TeX({
       packages: AllPackages,
-      ...mathjaxOptions?.tex,
+      ...options?.tex,
     }),
     OutputJax: new SVG({
       fontCache: "none",
-      ...mathjaxOptions?.svg,
+      ...options?.svg,
     }),
   };
 

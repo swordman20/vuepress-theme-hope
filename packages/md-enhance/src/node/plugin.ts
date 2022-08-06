@@ -23,7 +23,7 @@ import {
   imageSize,
   include,
   katex,
-  mathJaxPlugin,
+  mathjax,
   lazyLoad,
   mark,
   mermaid,
@@ -45,7 +45,6 @@ import { MATHML_TAGS } from "./utils";
 
 import type { PluginFunction } from "@vuepress/core";
 import type { KatexOptions } from "katex";
-import type { TexOptions } from "../shared/tex";
 import type { MarkdownEnhanceOptions } from "../shared";
 
 export const mdEnhancePlugin =
@@ -84,13 +83,11 @@ export const mdEnhancePlugin =
     const tasklistEnable = getStatus("tasklist", true);
     const mermaidEnable = getStatus("mermaid");
     const presentationEnable = getStatus("presentation");
-    const texEnable = getStatus("tex");
+    const katexEnable = getStatus("katex");
+    const mathjaxEnable = getStatus("mathjax");
 
     const shouldCheckLinks = getCheckLinksStatus(app, options);
 
-    const texOptions: TexOptions = (
-      typeof options.tex === "object" ? options.tex : {}
-    ) as TexOptions;
     const katexOptions: KatexOptions = {
       macros: {
         // support more symbols
@@ -101,7 +98,7 @@ export const mdEnhancePlugin =
         // eslint-disable-next-line @typescript-eslint/naming-convention
         "\\idotsint": "\\int\\!\\cdots\\!\\int",
       },
-      ...((texOptions.options || options.tex) as KatexOptions),
+      ...(typeof options.katex === "object" ? options.katex : {}),
     };
 
     const revealPlugins =
@@ -133,7 +130,7 @@ export const mdEnhancePlugin =
       }),
 
       extendsBundlerOptions: (config: unknown, app): void => {
-        if (katexOptions.output !== "html")
+        if (katexEnable && katexOptions.output !== "html")
           addCustomElement({ app, config }, MATHML_TAGS);
 
         if (chartEnable) {
@@ -197,17 +194,13 @@ export const mdEnhancePlugin =
           legacy
         )
           md.use(vPre);
-        if (texEnable) {
-          switch (texOptions.render) {
-            case "mathJax":
-              md.use(mathJaxPlugin, texOptions);
-              break;
-            case "katex":
-            default:
-              texOptions.options = katexOptions;
-              md.use(katex, texOptions);
-          }
-        }
+        if (katexEnable) md.use(katex, katexOptions);
+        else if (mathjaxEnable)
+          md.use(
+            mathjax,
+            typeof options.mathjax === "object" ? options.mathjax : {}
+          );
+
         if (getStatus("include"))
           md.use(
             include,
