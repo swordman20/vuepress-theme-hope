@@ -25,3 +25,4 @@ export * from "./tex";
 export * from "./vPre";
 export * from "./stylize";
 export * from "./uml";
+export * from "./playground";

@@ -1,6 +1,6 @@
 {
   "name": "vuepress-theme-hope-root",
-  "version": "2.0.0-beta.87",
+  "version": "2.0.0-beta.88",
   "private": true,
   "description": "A vuepress theme with tons of features",
   "type": "module",
@@ -106,7 +106,7 @@
     "typescript": "4.7.4",
     "vitest": "0.21.0"
   },
-  "packageManager": "pnpm@7.8.0",
+  "packageManager": "pnpm@7.9.0",
   "engines": {
     "node": ">=14",
     "pnpm": ">=7"
