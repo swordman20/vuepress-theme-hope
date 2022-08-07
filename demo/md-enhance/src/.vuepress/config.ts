@@ -58,9 +58,8 @@ export default defineUserConfig({
   plugins: [
     mdEnhancePlugin({
       enableAll: true,
-      tex: {
-        render: "katex",
-        plugins: ["mhchem"],
+      katex: {
+        mhchem: true,
       },
       presentation: {
         plugins: ["highlight", "math", "search", "notes", "zoom"],
